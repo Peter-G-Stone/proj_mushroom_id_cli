@@ -83,7 +83,7 @@ class Cli
     def self.select_plant
         list_all_plant_names
         puts "\nPlease type the name of the plant you'd like to select: \n"
-        name = gets.chomp
+        name = gets.chomp.downcase
         puts "\n ---- #{Plant.find_by_name(name).description} \n"
     end
 

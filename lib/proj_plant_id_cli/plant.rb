@@ -20,7 +20,7 @@ class Plant
     # end
 
     def self.find_by_name(name)
-        self.all.find{ |plant| plant.name == name}
+        self.all.find{ |plant| plant.name.downcase == name.downcase}
     end
     
     def self.all
