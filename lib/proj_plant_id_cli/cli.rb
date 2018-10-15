@@ -6,32 +6,23 @@ class Cli
     # require 'colorize'
     
 
-    @@scraper
 
     def self.run
         get_info
         main_menu
     end
 
-    def self.scraper 
-        @@scraper
-    end
 
-    def self.scraper=(activeScraper)
-        @@scraper = activeScraper
-    end
+    BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/"
 
-
-    # BASE_PATH = "./fixtures/student-site/"
-
-    # def run
-    # make_students
-    # add_attributes_to_students
-    # display_students
+    # def run < DONE
+    # make plants < DONE 
+    # add_attributes_to_plants < NEED TO REFACTOR TO SCRAPE DIFFERENT SITE TO GET MORE INFO
+    # display_plants << NEED TO ADD THIS ONCE I GET MORE INFO, USE COLORIZE TO MAKE IT PRETTY
     # end
 
     def self.get_info
-        plants_array = Scraper.scrape_index_page
+        plants_array = Scraper.scrape_index_page(BASE_URL)
         Plant.create_from_collection(plants_array)
     end
 
@@ -66,7 +57,7 @@ class Cli
         puts " \n\n-----------MAIN MENU-----------"
         puts " \n \nWelcome to your Pittsburgh tree Database!"
         puts "To read the intro, type 'read intro'."
-        puts "To list all of the plants' names, type 'list'."
+        puts "To list all of the plant info, type 'list'."
         puts "To get a description of a specific plant, type 'select'."
         puts "To get a google search of a specific plant, type 'search'."        
         puts "To quit, type 'exit'."
@@ -98,9 +89,17 @@ class Cli
 
     def self.select_plant
         list_all_plant_names
-        puts "\nPlease type the name of the plant you'd like to select: \n"
-        name = gets.chomp
-        puts "\n ---- #{Plant.find_by_name(name).description} \n" 
+        name = ""
+        found = false
+        plant = nil
+        
+        while !found  
+            puts "\nPlease type the name of the plant you'd like to select: \n"
+            name = gets.chomp
+            plant = Plant.find_by_name(name)
+            found = true if plant
+        end
+        puts "\n ---- #{Plant.find_by_name(name).description} \n"
         ##### still doesn't handle names that aren't in the system
     end
 

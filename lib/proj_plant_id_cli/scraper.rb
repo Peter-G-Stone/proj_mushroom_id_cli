@@ -15,9 +15,8 @@ class Scraper
         @@introtext = introtextFromDoc
     end
 
-    def self.scrape_index_page
+    def self.scrape_index_page(index_url)
 
-        index_url = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/"
 
         doc = Nokogiri::HTML(open(index_url))
 
