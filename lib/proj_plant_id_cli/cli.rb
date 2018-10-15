@@ -13,7 +13,10 @@ class Cli
     end
 
 
-    #BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/"
+    #BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/" <<< # this was original site I used, but 
+                                                                                      # there wasn't a satisfying amt of data
+
+
     BASE_URL = "http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms"
     
 
@@ -25,20 +28,22 @@ class Cli
 
     def self.get_info
         plants_array = Scraper.scrape_index_page(BASE_URL)
-        # Plant.create_from_collection(plants_array)
+        Plant.create_from_collection(plants_array)
+        add_attributes_to_plants
     end
 
-    # def add_attributes_to_plants
-    # Plant.all.each do |plant|
-    #     attributes = Scraper.scrape_profile_page(BASE_PATH + plant.profile_url)
-    #     plant.add_plant_attributes(attributes)
-    # end
-    # end
+    def self.add_attributes_to_plants
+        Plant.all.each do |plant|
+            attributes = Scraper.scrape_profile_page(plant.link)
+            # binding.pry
+            plant.add_plant_attributes(attributes)
+        end
+    end
 
     def self.main_menu
         print_main_menu
         input = ""
-        while !input.include?("exit")
+        while input != "exit" 
             print "\n\nWhat would you like to do? \nTo see the options, type 'menu'.\n->"
             input = gets.chomp
             if input == "read intro"
@@ -48,9 +53,10 @@ class Cli
             elsif input == "menu"
                 print_main_menu
             elsif input == "select"
-                select_plant
-            elsif input == "search"
-                search_plant
+                plant = select_plant
+                print_description(plant)
+            elsif input == "link"
+                link_plant
             end
         end
     end
@@ -61,7 +67,7 @@ class Cli
         puts "To read the intro, type 'read intro'."
         puts "To list all of the plant info, type 'list'."
         puts "To get a description of a specific plant, type 'select'."
-        puts "To get a google search of a specific plant, type 'search'."        
+        puts "To get a link to images of a specific plant, type 'link'."        
         puts "To quit, type 'exit'."
     end
 
@@ -78,45 +84,59 @@ class Cli
     def self.list_all
         Plant.all.each{ |plant|
             puts "\n #{plant.name} \n"
-            puts " ---- #{plant.description}"
+            puts " ---- this is where the info will go" ## TODO <<<< TODO
         }   
     end
 
     def self.list_all_plant_names
         puts "\n"
-        Plant.all.each{ |plant|
-            puts "#{plant.name}"
+        Plant.all.each.with_index{ |plant, i|
+            puts "#{i+1}. #{plant.name}"
         }
     end
 
     def self.select_plant
         list_all_plant_names
-        name = ""
+        num = 0
         found = false
         plant = nil
         
         while !found  
-            puts "\nPlease type the name of the plant you'd like to select: \n"
-            name = gets.chomp
-            plant = Plant.find_by_name(name)
-            found = true if plant
+            puts "\nPlease type the number of the plant you'd like to select: \n"
+            num = gets.chomp.to_i
+            plant = Plant.all[num-1]
+            found = true if plant.class == Plant
         end
-        puts "\n ---- #{Plant.find_by_name(name).description} \n"
-        ##### still doesn't handle names that aren't in the system
+        plant
     end
 
-    def self.search_plant
-        list_all_plant_names
-        puts "\nPlease type the name of the plant you'd like to search: \n"
-        name = gets.chomp
-        nameA = name.split(" ")
-        print "https://www.google.com/search?q="
-        nameA.each {|word| 
-            print "#{word}"
-            print "+" if word != nameA[-1]
+    def self.print_description(plant)
+        plant.class.expectedInfoTypes.drop(2).each {|infoType|
+            if plant.send("#{infoType}")
+            
+                puts " -- #{infoType.upcase.to_s.split("NN").join("N N")}"
+                puts " ---- #{plant.send("#{infoType}")}\n\n"
+            end
         }
-        puts ""
     end
+
+    def self.link_plant
+        plant = select_plant
+        puts plant.link
+    end
+
+    # def self.search_plant
+    #     list_all_plant_names
+    #     puts "\nPlease type the name of the plant you'd like to search: \n"
+    #     name = gets.chomp
+    #     nameA = name.split(" ")
+    #     print "https://www.google.com/search?q="
+    #     nameA.each {|word| 
+    #         print "#{word}"
+    #         print "+" if word != nameA[-1]
+    #     }
+    #     puts ""
+    # end
 
 
     # def display_students

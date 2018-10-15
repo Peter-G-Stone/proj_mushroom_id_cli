@@ -2,10 +2,12 @@ class Plant
     
     @@all = []
     
-    attr_accessor :name, :description
+    attr_accessor :name, :link, :commonName, :latinName, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spores, :flesh, :habitat, :frequency
 
-    def initialize(student_hash)
-        student_hash.each{|k,v| self.send(("#{k}="), v)}
+    @@expectedInfoTypes = [:name, :link, :commonName, :latinName, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spores, :flesh, :habitat, :frequency]
+
+    def initialize(plant_hash)
+        plant_hash.each{|k,v| self.send(("#{k}="), v)}
         @@all << self
       end
     
@@ -15,9 +17,9 @@ class Plant
         }
     end 
 
-    # def add_plant_attributes(attributes_hash)
-    #     attributes_hash.each{|k,v| self.send(("#{k}="), v)}
-    # end
+    def add_plant_attributes(attributes_hash)
+        attributes_hash.each{|k,v| self.send(("#{k}="), v)}
+    end
 
     def self.find_by_name(name)
         self.all.find{ |plant| plant.name.downcase == name.downcase}
@@ -25,5 +27,9 @@ class Plant
     
     def self.all
         @@all
+    end
+
+    def self.expectedInfoTypes
+        @@expectedInfoTypes
     end
 end

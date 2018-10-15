@@ -27,7 +27,7 @@ class Scraper
         doc = Nokogiri::HTML(open(index_url))
 
         
-        @@introtext = doc.css(".article p").text.split("»")[1]
+        @@introtext = doc.css(".article p").text.split("»")[1].split(".").join(". ")
         
         plants_array = []
         
@@ -41,42 +41,29 @@ class Scraper
     
 
     def self.scrape_profile_page(profile_url)
-        doc = Nokogiri::HTML(open(profile_url))    
-        profile_hash = {
-            bio: doc.css(".description-holder p").text,
-            profile_quote: doc.css(".profile-quote").text
-        }       
+        
+        doc = Nokogiri::HTML(open(profile_url))            
 
-        social_array = doc.css(".social-icon-container a")
-        # self.parse_socials(profile_hash, social_array)
+        profile_hash = {
+            commonName: doc.css("title").text.split(" - ")[0],
+            latinName: doc.css("title").text.split(" - ")[1]
+            # edibility: doc.css(".sp_items p")[2].children[1].text,
+            # eatingNotes: doc.css(".sp_items p")[3].children[1].text,
+            # preserving: doc.css(".sp_items p")[4].children[1].text
+        }
+        
+        doc.css(".sp_items p").drop(2).each do |nokoEl|
+            profile_hash[parse_key(nokoEl)] = nokoEl.children[1].text.gsub(":", "").strip
+        end
+        profile_hash
+        
     end
 
-#   def self.parse_socials(profile_hash, social_array)
-#     social_array.each do |noko_el|
-#       link = noko_el.attr("href")
-#       if link.include?("twitter")
-#         profile_hash[:twitter] = link
-#       elsif link.include?("facebook")
-#         profile_hash[:facebook] = link
-#       elsif link.include?("github")
-#         profile_hash[:github] = link
-#       elsif link.include?("linkedin")
-#         profile_hash[:linkedin] = link
-#       else
-#         profile_hash[:blog] = link
-#       end 
-#     end
-#     profile_hash
-#   end#   def self.scrape_profile_page(profile_url)
-#     doc = Nokogiri::HTML(open(profile_url))    
-#     profile_hash = {
-#       bio: doc.css(".description-holder p").text,
-#       profile_quote: doc.css(".profile-quote").text
-#     }       
-   
-#     social_array = doc.css(".social-icon-container a")
-#     self.parse_socials(profile_hash, social_array)
-#   end
+    def self.parse_key(nokoEl)
+        nokoEl.children[0].text.gsub(":", "").strip.downcase.split(" ").join("_")
+    end
+
+
 
 #   def self.parse_socials(profile_hash, social_array)
 #     social_array.each do |noko_el|
