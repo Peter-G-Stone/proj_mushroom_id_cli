@@ -50,18 +50,31 @@ class Cli
             input = gets.chomp
             if input == "read intro"
                 print_intro
-            elsif input == "list all"
+            elsif input == "list"
                 list_all 
             elsif input == "menu"
                 print_main_menu
-            elsif input == "select plant"
+            elsif input == "select"
                 select_plant
             end
         end
     end
 
-    def self.print_intro
-       
+    def self.print_main_menu
+        puts " \n\n-----------MAIN MENU-----------"
+        puts " \n \nWelcome to your Pittsburgh tree Database!"
+        puts "To read the intro, type 'read intro'."
+        puts "To list all of the plants' names, type 'list'."
+        puts "To get a description of a specific plant, type 'select'."
+        puts "To quit, type 'exit'."
+    end
+
+    #------------------------------
+    #------------------------------
+    #------------------------------
+    #------------------------------
+    
+    def self.print_intro      
         puts " \n --- #{Scraper.introtext}"
         list_all_plant_names
     end
@@ -83,23 +96,10 @@ class Cli
     def self.select_plant
         list_all_plant_names
         puts "\nPlease type the name of the plant you'd like to select: \n"
-        name = gets.chomp.downcase
+        name = gets.chomp
         puts "\n ---- #{Plant.find_by_name(name).description} \n"
     end
 
-    def self.print_main_menu
-        puts " \n\n-----------MAIN MENU-----------"
-        puts " \n \nWelcome to your Pittsburgh tree Database!"
-        puts "To read the intro, type 'read intro'."
-        puts "To list all of the plants' names, type 'list all'."
-        puts "To get a description of a specific plant, type 'select plant'."
-        puts "To quit, type 'exit'."
-    end
-
-    # def self.print_user_prompt
-    #     puts "\nWhat would you like to do?"
-    #     puts "To see the options, type 'menu'.\n\n"
-    # end
 
     # def display_students
     # Student.all.each do |student|
