@@ -13,7 +13,9 @@ class Cli
     end
 
 
-    BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/"
+    #BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/"
+    BASE_URL = "http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms"
+    
 
     # def run < DONE
     # make plants < DONE 
@@ -23,13 +25,13 @@ class Cli
 
     def self.get_info
         plants_array = Scraper.scrape_index_page(BASE_URL)
-        Plant.create_from_collection(plants_array)
+        # Plant.create_from_collection(plants_array)
     end
 
-    # def add_attributes_to_students
-    # Student.all.each do |student|
-    #     attributes = Scraper.scrape_profile_page(BASE_PATH + student.profile_url)
-    #     student.add_student_attributes(attributes)
+    # def add_attributes_to_plants
+    # Plant.all.each do |plant|
+    #     attributes = Scraper.scrape_profile_page(BASE_PATH + plant.profile_url)
+    #     plant.add_plant_attributes(attributes)
     # end
     # end
 
@@ -55,7 +57,7 @@ class Cli
 
     def self.print_main_menu
         puts " \n\n-----------MAIN MENU-----------"
-        puts " \n \nWelcome to your Pittsburgh tree Database!"
+        puts " \n \nWelcome to your Plant Database!"
         puts "To read the intro, type 'read intro'."
         puts "To list all of the plant info, type 'list'."
         puts "To get a description of a specific plant, type 'select'."

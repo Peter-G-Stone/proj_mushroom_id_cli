@@ -3,6 +3,13 @@ require 'nokogiri' ##standard to include both of these in order to do this scrap
 require 'pry'
 
 
+#built to scrape:
+
+#       http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms
+#
+# and then:
+#
+#       each of the mushroom profile pages that that page links to
 class Scraper
 
     @@introtext
@@ -21,19 +28,29 @@ class Scraper
         doc = Nokogiri::HTML(open(index_url))
 
         
-        @@introtext = doc.css(".entry p")[0].text + " " + doc.css(".entry p")[1].text + " " + doc.css(".entry p")[2].text
-
+        @@introtext = doc.css(".article p").text.split("»")[1]
+        
         plants_array = []
-
-        titleCounter = 0
-        for i in 4...24
-            if i.even?
-                plants_array << {name: doc.css(".entry h2")[titleCounter].text, description: doc.css(".entry p")[i].text}
-                titleCounter += 1
-            end
+        
+        doc.css("li").each.with_index do |plant, i|
+            plants_array << {name: doc.css("li")[i].text, link: "http://www.foragingguide.com" + "#{doc.css("li a")[i].attr("href")}"}
         end
+        
+        binding.pry
 
-        plants_array
+        # titleCounter = 0
+        # for i in 4...24
+        #     if i.even?
+        #         plants_array << {name: doc.css(".entry h2")[titleCounter].text, description: doc.css(".entry p")[i].text}
+        #         titleCounter += 1
+        #     end
+        # end
+
+        
+
+        # plants_array
+
+
     end
 
     #
