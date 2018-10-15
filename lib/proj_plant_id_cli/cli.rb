@@ -83,15 +83,16 @@ class Cli
 
     def self.list_all
         Plant.all.each{ |plant|
-            puts "\n #{plant.name} \n"
-            puts " ---- this is where the info will go" ## TODO <<<< TODO
+            puts "------------------------------------\n------------------------------------\n\n"
+            print_description(plant)
+            puts "------------------------------------\n------------------------------------\n\n"
         }   
     end
 
     def self.list_all_plant_names
         puts "\n"
         Plant.all.each.with_index{ |plant, i|
-            puts "#{i+1}. #{plant.name}"
+            puts "#{i+1}. #{plant.common_name}"
         }
     end
 
@@ -111,13 +112,13 @@ class Cli
     end
 
     def self.print_description(plant)
-        plant.class.expectedInfoTypes.drop(2).each {|infoType|
-            if plant.send("#{infoType}")
-            
-                puts " -- #{infoType.upcase.to_s.split("NN").join("N N")}"
+        plant.class.expectedInfoTypes.each {|infoType|
+            if plant.send("#{infoType}")         
+                puts " -- #{infoType.upcase.to_s.split("_").join(" ")}"
                 puts " ---- #{plant.send("#{infoType}")}\n\n"
             end
         }
+
     end
 
     def self.link_plant
