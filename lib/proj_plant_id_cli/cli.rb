@@ -56,6 +56,8 @@ class Cli
                 print_main_menu
             elsif input == "select"
                 select_plant
+            elsif input == "search"
+                search_plant
             end
         end
     end
@@ -66,6 +68,7 @@ class Cli
         puts "To read the intro, type 'read intro'."
         puts "To list all of the plants' names, type 'list'."
         puts "To get a description of a specific plant, type 'select'."
+        puts "To get a google search of a specific plant, type 'search'."        
         puts "To quit, type 'exit'."
     end
 
@@ -97,7 +100,21 @@ class Cli
         list_all_plant_names
         puts "\nPlease type the name of the plant you'd like to select: \n"
         name = gets.chomp
-        puts "\n ---- #{Plant.find_by_name(name).description} \n"
+        puts "\n ---- #{Plant.find_by_name(name).description} \n" 
+        ##### still doesn't handle names that aren't in the system
+    end
+
+    def self.search_plant
+        list_all_plant_names
+        puts "\nPlease type the name of the plant you'd like to search: \n"
+        name = gets.chomp
+        nameA = name.split(" ")
+        print "https://www.google.com/search?q="
+        nameA.each {|word| 
+            print "#{word}"
+            print "+" if word != nameA[-1]
+        }
+        puts ""
     end
 
 
