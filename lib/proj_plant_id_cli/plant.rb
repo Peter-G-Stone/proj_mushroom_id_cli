@@ -1,4 +1,4 @@
-class Plant
+class ProjPlantIdCli::Plant
     
     @@all = []
     
@@ -13,7 +13,7 @@ class Plant
     
     def self.create_from_collection(plants_array)
         plants_array.each { |plant|
-            Plant.new(plant)
+        ProjPlantIdCli::Plant.new(plant)
         }
     end 
 

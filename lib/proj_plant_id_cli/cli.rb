@@ -1,41 +1,29 @@
-class Cli 
-
-    require_relative "scraper.rb"
-    require_relative "plant.rb"
-    require 'nokogiri'
-    # require 'colorize'
-    
-
+class ProjPlantIdCli::Cli 
 
     def self.run
         get_info
         main_menu
     end
 
-
-    #BASE_URL = "http://popularpittsburgh.com/ten-common-trees-found-neck-woods/" <<< # this was original site I used, but 
-                                                                                      # there wasn't a satisfying amt of data
-
-
     BASE_URL = "http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms"
     
 
     # def run < DONE
     # make plants < DONE 
-    # add_attributes_to_plants < NEED TO REFACTOR TO SCRAPE DIFFERENT SITE TO GET MORE INFO
-    # display_plants << NEED TO ADD THIS ONCE I GET MORE INFO, USE COLORIZE TO MAKE IT PRETTY
+    # add_attributes_to_plants < DONE
+    # display_plants << NEED TO IMPROVE THIS, USE COLORIZE TO MAKE IT PRETTY
+    # sort methods << MAY WANT TO ADD THIS
     # end
 
     def self.get_info
-        plants_array = Scraper.scrape_index_page(BASE_URL)
-        Plant.create_from_collection(plants_array)
+        plants_array = ProjPlantIdCli::Scraper.scrape_index_page(BASE_URL)
+        ProjPlantIdCli::Plant.create_from_collection(plants_array)
         add_attributes_to_plants
     end
 
     def self.add_attributes_to_plants
-        Plant.all.each do |plant|
-            attributes = Scraper.scrape_profile_page(plant.link)
-            # binding.pry
+        ProjPlantIdCli::Plant.all.each do |plant|
+            attributes = ProjPlantIdCli::Scraper.scrape_profile_page(plant.link)
             plant.add_plant_attributes(attributes)
         end
     end
@@ -63,11 +51,11 @@ class Cli
 
     def self.print_main_menu
         puts " \n\n-----------MAIN MENU-----------"
-        puts " \n \nWelcome to your Plant Database!"
+        puts " \n \nWelcome to the Mushroom Foraging Database!"
         puts "To read the intro, type 'read intro'."
-        puts "To list all of the plant info, type 'list'."
-        puts "To get a description of a specific plant, type 'select'."
-        puts "To get a link to images of a specific plant, type 'link'."        
+        puts "To list all of the mushroom foraging info, type 'list'."
+        puts "To get a description of a specific mushroom, type 'select'."
+        puts "To get a link to images of a specific mushroom, type 'link'."        
         puts "To quit, type 'exit'."
     end
 
@@ -77,12 +65,12 @@ class Cli
     #------------------------------
     
     def self.print_intro      
-        puts " \n --- #{Scraper.introtext}"
+        puts " \n --- #{ProjPlantIdCli::Scraper.introtext}"
         list_all_plant_names
     end
 
     def self.list_all
-        Plant.all.each{ |plant|
+        ProjPlantIdCli::Plant.all.each{ |plant|
             puts "------------------------------------\n------------------------------------\n\n"
             print_description(plant)
             puts "------------------------------------\n------------------------------------\n\n"
@@ -91,7 +79,7 @@ class Cli
 
     def self.list_all_plant_names
         puts "\n"
-        Plant.all.each.with_index{ |plant, i|
+        ProjPlantIdCli::Plant.all.each.with_index{ |plant, i|
             puts "#{i+1}. #{plant.common_name}"
         }
     end
@@ -105,8 +93,8 @@ class Cli
         while !found  
             puts "\nPlease type the number of the plant you'd like to select: \n"
             num = gets.chomp.to_i
-            plant = Plant.all[num-1]
-            found = true if plant.class == Plant
+            plant = ProjPlantIdCli::Plant.all[num-1]
+            found = true if plant.class == ProjPlantIdCli::Plant
         end
         plant
     end

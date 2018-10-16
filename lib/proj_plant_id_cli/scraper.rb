@@ -10,7 +10,7 @@ require 'pry'
 # and then:
 #
 #       each of the mushroom profile pages that that page links to
-class Scraper
+class ProjPlantIdCli::Scraper
 
     @@introtext
     
