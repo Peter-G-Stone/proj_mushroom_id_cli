@@ -30,10 +30,9 @@ class ProjMushroomIdCli::Cli
     end
 
     def self.main_menu
-        print_main_menu
         input = ""
         while input != "exit" 
-            
+            print_main_menu                  
             input = gets.chomp.downcase
             case input
                 when "read intro"
@@ -47,14 +46,14 @@ class ProjMushroomIdCli::Cli
                     if mushroom.class == ProjMushroomIdCli::Mushroom
                         puts "\n\n Here is your selection: \n -------------".colorize(:magenta)
                         print_description(mushroom) 
-
                     end
                 when "link"
                     link_mushroom
                 else
-                    puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n".colorize(:red)
+                    if input != "exit"
+                        puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n".colorize(:red)
+                    end
             end
-            print_main_menu            
         end
     end
 
@@ -95,7 +94,6 @@ class ProjMushroomIdCli::Cli
 
     
     def self.select_mushroom
-        list_all_mushroom_names
         firstTime = true
         mushroom = nil
         found = false
