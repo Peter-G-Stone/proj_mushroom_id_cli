@@ -1,7 +1,7 @@
 require 'pry'
 require 'nokogiri'
 require 'open-uri'
-# require 'colorize'
+require 'colorize'
 
 
 module ProjMushroomIdCli

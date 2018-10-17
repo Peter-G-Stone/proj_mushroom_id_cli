@@ -1,6 +1,6 @@
 class ProjMushroomIdCli::Cli 
 
-    def self.run
+    def self.run  ### HERE YOU FIND OUR MAIN PROCESS - FIRST WE GET THE INFO, THEN WE CYCLE THE MAIN MENU
         get_info
         main_menu
     end
@@ -12,6 +12,7 @@ class ProjMushroomIdCli::Cli
     # make mushrooms < DONE 
     # add_attributes_to_mushrooms < DONE
     # display_mushrooms << NEED TO IMPROVE THIS, USE COLORIZE TO MAKE IT PRETTY
+        # possible colors: black, red, green, yellow, blue, magenta, cyan, white, plus all those things with light_
     # sort methods << MAY WANT TO ADD THIS
     # end
 
@@ -43,24 +44,28 @@ class ProjMushroomIdCli::Cli
                     print_main_menu
                 when "select"
                     mushroom = select_mushroom
-                    print_description(mushroom) if mushroom.class == ProjMushroomIdCli::Mushroom
+                    if mushroom.class == ProjMushroomIdCli::Mushroom
+                        puts "\n\n Here is your selection: \n -------------".colorize(:magenta)
+                        print_description(mushroom) 
+
+                    end
                 when "link"
                     link_mushroom
                 else
-                    puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
+                    puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n".colorize(:red)
             end
             print_main_menu            
         end
     end
 
     def self.print_main_menu
-        puts " \n--THE MUSHROOM FORAGING DATABASE--"
-        puts " \n-----------MAIN MENU-----------"
-        puts "To read an intro, type 'read intro'."
-        puts "To read all of the mushroom foraging info, type 'all'."
-        puts "To get a description of a specific mushroom, type 'select'."
-        puts "To get a link to images of a specific mushroom, type 'link'."        
-        puts "To quit, type 'exit'."
+        puts " \n--THE MUSHROOM FORAGING DATABASE--".colorize(:magenta)
+        puts " \n-----------MAIN MENU-----------".colorize(:blue)
+        puts "To read an intro, type 'read intro'.".colorize(:blue)
+        puts "To read all of the mushroom foraging info, type 'all'.".colorize(:blue)
+        puts "To get a description of a specific mushroom, type 'select'.".colorize(:blue)
+        puts "To get a link to images of a specific mushroom, type 'link'.".colorize(:blue)
+        puts "To quit, type 'exit'.".colorize(:blue)
     end
 
     #------------------------------
@@ -75,16 +80,16 @@ class ProjMushroomIdCli::Cli
 
     def self.list_all
         ProjMushroomIdCli::Mushroom.all.each{ |mushroom|
-            puts "------------------------------------\n------------------------------------\n\n"
+            puts "------------------------------------\n------------------------------------\n\n".colorize(:blue)
             print_description(mushroom)
-            puts "------------------------------------\n------------------------------------\n\n"
+            puts "------------------------------------\n------------------------------------\n\n".colorize(:blue)
         }   
     end
 
     def self.list_all_mushroom_names
         puts "\n"
         ProjMushroomIdCli::Mushroom.all.each.with_index{ |mushroom, i|
-            puts "#{i+1}. #{mushroom.common_name}"
+            puts "#{i+1}. #{mushroom.common_name}".colorize(:blue)
         }
     end
 
@@ -98,8 +103,9 @@ class ProjMushroomIdCli::Cli
         while !found  
             found = false
             num = nil
-            puts "\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n" if !firstTime
-            puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n"
+            puts "\n\n\n\n\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n".colorize(:red) if !firstTime
+            puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n".colorize(:blue)
+            list_all_mushroom_names
             num = gets.chomp
             return if num == 'menu'
             num = num.to_i
@@ -112,33 +118,11 @@ class ProjMushroomIdCli::Cli
         end
         mushroom
     end
-    
-    # def self.select_mushroom
-    #     input = nil
-    #     found = false
-    #     mushroom = nil
-        
-    #     while !found  
-    #         list_all_mushroom_names
-    #         puts "\nPlease type the number of the mushroom you'd like to select: \n"
-    #         input = gets.chomp
-    #         if input == exit 
-    #             return
-    #         elsif input.to_i > 0 && input.to_i <= mushroom.all.count
-    #             input = (input.to_i - 1)
-    #             mushroom = ProjmushroomIdCli::mushroom.all[input]
-    #             found = true if mushroom.class == ProjmushroomIdCli::mushroom
-    #         else
-    #             puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
-    #         end
-    #     end
-    #     mushroom
-    # end
 
     def self.print_description(mushroom)
         mushroom.class.expectedInfoTypes.each {|infoType|
             if mushroom.send("#{infoType}")         
-                puts " -- #{infoType.upcase.to_s.split("_").join(" ")}"
+                puts " -- #{infoType.upcase.to_s.split("_").join(" ")}".colorize(:blue)
                 puts " ---- #{mushroom.send("#{infoType}")}\n\n"
             end
         }
@@ -149,33 +133,4 @@ class ProjMushroomIdCli::Cli
         mushroom = select_mushroom
         puts mushroom.link if mushroom.class == ProjMushroomIdCli::Mushroom
     end
-
-    # def self.search_mushroom
-    #     list_all_mushroom_names
-    #     puts "\nPlease type the name of the mushroom you'd like to search: \n"
-    #     name = gets.chomp
-    #     nameA = name.split(" ")
-    #     print "https://www.google.com/search?q="
-    #     nameA.each {|word| 
-    #         print "#{word}"
-    #         print "+" if word != nameA[-1]
-    #     }
-    #     puts ""
-    # end
-
-
-    # def display_students
-    # Student.all.each do |student|
-    #     puts "#{student.name.upcase}".colorize(:blue)
-    #     puts "  location:".colorize(:light_blue) + " #{student.location}"
-    #     puts "  profile quote:".colorize(:light_blue) + " #{student.profile_quote}"
-    #     puts "  bio:".colorize(:light_blue) + " #{student.bio}"
-    #     puts "  twitter:".colorize(:light_blue) + " #{student.twitter}"
-    #     puts "  linkedin:".colorize(:light_blue) + " #{student.linkedin}"
-    #     puts "  github:".colorize(:light_blue) + " #{student.github}"
-    #     puts "  blog:".colorize(:light_blue) + " #{student.blog}"
-    #     puts "----------------------".colorize(:green)
-    # end
-    # end
-
 end
