@@ -32,8 +32,24 @@ class ProjPlantIdCli::Cli
         print_main_menu
         input = ""
         while input != "exit" 
-            print "\n\nWhat would you like to do? \nTo see the options, type 'menu'.\n->"
-            input = gets.chomp
+            
+            input = gets.chomp.downcase
+            # case input
+            #     when "read intro"
+            #         print_intro
+            #     when "all"
+            #         list_all 
+            #     when "menu"
+            #         print_main_menu
+            #     when "select"
+            #         plant = select_plant
+            #         print_description(plant)
+            #     when "link"
+            #         link_plant
+            #     else
+            #         puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
+            # end
+            # print_main_menu
             if input == "read intro"
                 print_intro
             elsif input == "list"
@@ -45,15 +61,18 @@ class ProjPlantIdCli::Cli
                 print_description(plant)
             elsif input == "link"
                 link_plant
+            else
+                puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
             end
+            print_main_menu
         end
     end
 
     def self.print_main_menu
-        puts " \n\n-----------MAIN MENU-----------"
-        puts " \n \nWelcome to the Mushroom Foraging Database!"
-        puts "To read the intro, type 'read intro'."
-        puts "To list all of the mushroom foraging info, type 'list'."
+        puts " \n--THE MUSHROOM FORAGING DATABASE--"
+        puts " \n-----------MAIN MENU-----------"
+        puts "To read an intro, type 'read intro'."
+        puts "To read all of the mushroom foraging info, type 'all'."
         puts "To get a description of a specific mushroom, type 'select'."
         puts "To get a link to images of a specific mushroom, type 'link'."        
         puts "To quit, type 'exit'."
@@ -84,20 +103,46 @@ class ProjPlantIdCli::Cli
         }
     end
 
+    
     def self.select_plant
         list_all_plant_names
-        num = 0
+        num = nil
         found = false
+        firstTime = true
         plant = nil
         
         while !found  
+            puts "\n I'm sorry! Please enter one of the numbers of an available plant.\n" if !firstTime
             puts "\nPlease type the number of the plant you'd like to select: \n"
             num = gets.chomp.to_i
             plant = ProjPlantIdCli::Plant.all[num-1]
             found = true if plant.class == ProjPlantIdCli::Plant
+            firstTime = false
         end
         plant
     end
+    
+    # def self.select_plant
+    #     input = nil
+    #     found = false
+    #     plant = nil
+        
+    #     while !found  
+    #         list_all_plant_names
+    #         puts "\nPlease type the number of the plant you'd like to select: \n"
+    #         input = gets.chomp
+    #         if input == exit 
+    #             return
+    #         elsif input.to_i > 0 && input.to_i <= Plant.all.count
+    #             input = (input.to_i - 1)
+    #             plant = ProjPlantIdCli::Plant.all[input]
+    #             found = true if plant.class == ProjPlantIdCli::Plant
+    #         else
+    #             puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
+    #         end
+    #     end
+    #     plant
+    # end
 
     def self.print_description(plant)
         plant.class.expectedInfoTypes.each {|infoType|

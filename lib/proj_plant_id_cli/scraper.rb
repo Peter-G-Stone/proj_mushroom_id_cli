@@ -20,6 +20,7 @@ class ProjPlantIdCli::Scraper
 
     def self.introtext=(introtextFromDoc)
         @@introtext = introtextFromDoc
+        
     end
 
     def self.scrape_index_page(index_url)
@@ -27,7 +28,7 @@ class ProjPlantIdCli::Scraper
         doc = Nokogiri::HTML(open(index_url))
 
         
-        @@introtext = doc.css(".article p").text.split("»")[1].split(".").join(". ")
+        @@introtext = (doc.css(".article p").text.split("»")[1].split(".").join(". ") + ".")
         
         plants_array = []
         
