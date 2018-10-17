@@ -2,14 +2,25 @@ require 'open-uri'
 require 'nokogiri' ##standard to include both of these in order to do this scraping
 require 'pry'
 
-
-#built to scrape:
-
+#------------------
+#originally built to scrape:
 #       http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms
 #
 # and then:
-#
 #       each of the mushroom profile pages that that page links to
+#
+
+#
+#
+#
+#
+# ATTENTION ATTENTION ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ATTENTION ATTENTION ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ATTENTION ATTENTION ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#working to refactor to scrape the 'in season' mushrooms:
+#       http://www.foragingguide.com/mushrooms/in_season
+#------------------
+
 class ProjMushroomIdCli::Scraper
 
     @@introtext
@@ -28,8 +39,11 @@ class ProjMushroomIdCli::Scraper
         doc = Nokogiri::HTML(open(index_url))
 
         
-        @@introtext = (doc.css(".article p").text.split("»")[1].split(".").join(". ") + ".")
-        
+        # @@introtext = (doc.css(".article p").text.split("»")[1].split(".").join(". ") + ".")
+        # originally introtext read from the '10 most common' webpage. 
+        #Now that we're scraping the 'in season' page, introtext will be set to a custom intro.
+        @@introtext = "Please excercise extreme caution when foraging mushrooms. \nAlways forage with an experienced guide. \nDo not consume anything unless you are 1000% sure what you are eating."
+
         mushrooms_array = []
         
         doc.css("li").each.with_index do |mushroom, i|

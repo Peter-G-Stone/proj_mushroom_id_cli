@@ -73,8 +73,7 @@ class ProjMushroomIdCli::Cli
     #------------------------------
     
     def self.print_intro      
-        puts " \n --- #{ProjMushroomIdCli::Scraper.introtext}"
-        list_all_mushroom_names
+        puts " \n#{ProjMushroomIdCli::Scraper.introtext}".colorize(:red)
     end
 
     def self.list_all
