@@ -52,13 +52,13 @@ class ProjMushroomIdCli::Cli
             # print_main_menu
             if input == "read intro"
                 print_intro
-            elsif input == "list"
+            elsif input == "all"
                 list_all 
             elsif input == "menu"
                 print_main_menu
             elsif input == "select"
                 mushroom = select_mushroom
-                print_description(mushroom)
+                print_description(mushroom) if mushroom.class == ProjMushroomIdCli::Mushroom
             elsif input == "link"
                 link_mushroom
             else
@@ -113,9 +113,11 @@ class ProjMushroomIdCli::Cli
         while !found  
             found = false
             num = nil
-            puts "\n I'm sorry! Please enter one of the numbers of an available mushroom.\n" if !firstTime
-            puts "\nPlease type the number of the mushroom you'd like to select: \n"
-            num = gets.chomp.to_i
+            puts "\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n" if !firstTime
+            puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n"
+            num = gets.chomp
+            return if num == 'menu'
+            num = num.to_i
             if num > 0 && num < 11
                 # binding.pry
                 mushroom = ProjMushroomIdCli::Mushroom.all[num-1]
@@ -160,7 +162,7 @@ class ProjMushroomIdCli::Cli
 
     def self.link_mushroom
         mushroom = select_mushroom
-        puts mushroom.link
+        puts mushroom.link if mushroom.class == ProjMushroomIdCli::Mushroom
     end
 
     # def self.search_mushroom
