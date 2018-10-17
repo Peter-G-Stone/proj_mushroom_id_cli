@@ -8,6 +8,6 @@ gem 'nokogiri'
 group :testing, :development do
     gem 'pry'
 end
-# Specify your gem's dependencies in proj_plant_id_cli.gemspec
+# Specify your gem's dependencies in proj_mushroom_id_cli.gemspec
 #gemspec
 

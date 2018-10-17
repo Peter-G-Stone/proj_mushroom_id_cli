@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "proj_plant_id_cli/version"
+require "proj_mushroom_id_cli/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "proj_plant_id_cli"
-  spec.version       = ProjPlantIdCli::VERSION
+  spec.name          = "proj_mushroom_id_cli"
+  spec.version       = ProjMushroomIdCli::VERSION
   spec.authors       = ["<Peter-G-Stone>"]
   spec.email         = ["<peter.stone.online@gmail.com>"]
 

@@ -1,6 +1,6 @@
-RSpec.describe ProjPlantIdCli do
+RSpec.describe ProjMushroomIdCli do
   it "has a version number" do
-    expect(ProjPlantIdCli::VERSION).not_to be nil
+    expect(ProjMushroomIdCli::VERSION).not_to be nil
   end
 
   it "does something useful" do

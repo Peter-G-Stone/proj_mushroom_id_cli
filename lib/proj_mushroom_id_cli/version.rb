@@ -1,4 +1,4 @@
-module ProjPlantIdCli
+module ProjMushroomIdCli
   VERSION = "0.1.0"
 end
 

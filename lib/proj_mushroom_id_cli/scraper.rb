@@ -10,7 +10,7 @@ require 'pry'
 # and then:
 #
 #       each of the mushroom profile pages that that page links to
-class ProjPlantIdCli::Scraper
+class ProjMushroomIdCli::Scraper
 
     @@introtext
     
@@ -30,13 +30,13 @@ class ProjPlantIdCli::Scraper
         
         @@introtext = (doc.css(".article p").text.split("»")[1].split(".").join(". ") + ".")
         
-        plants_array = []
+        mushrooms_array = []
         
-        doc.css("li").each.with_index do |plant, i|
-            plants_array << {common_name: doc.css("li")[i].text, link: "http://www.foragingguide.com" + "#{doc.css("li a")[i].attr("href")}"}
+        doc.css("li").each.with_index do |mushroom, i|
+            mushrooms_array << {common_name: doc.css("li")[i].text, link: "http://www.foragingguide.com" + "#{doc.css("li a")[i].attr("href")}"}
         end
         
-        plants_array
+        mushrooms_array
     end
 
     

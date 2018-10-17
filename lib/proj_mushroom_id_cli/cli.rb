@@ -1,4 +1,4 @@
-class ProjPlantIdCli::Cli 
+class ProjMushroomIdCli::Cli 
 
     def self.run
         get_info
@@ -9,22 +9,22 @@ class ProjPlantIdCli::Cli
     
 
     # def run < DONE
-    # make plants < DONE 
-    # add_attributes_to_plants < DONE
-    # display_plants << NEED TO IMPROVE THIS, USE COLORIZE TO MAKE IT PRETTY
+    # make mushrooms < DONE 
+    # add_attributes_to_mushrooms < DONE
+    # display_mushrooms << NEED TO IMPROVE THIS, USE COLORIZE TO MAKE IT PRETTY
     # sort methods << MAY WANT TO ADD THIS
     # end
 
     def self.get_info
-        plants_array = ProjPlantIdCli::Scraper.scrape_index_page(BASE_URL)
-        ProjPlantIdCli::Plant.create_from_collection(plants_array)
-        add_attributes_to_plants
+        mushrooms_array = ProjMushroomIdCli::Scraper.scrape_index_page(BASE_URL)
+        ProjMushroomIdCli::Mushroom.create_from_collection(mushrooms_array)
+        add_attributes_to_mushrooms
     end
 
-    def self.add_attributes_to_plants
-        ProjPlantIdCli::Plant.all.each do |plant|
-            attributes = ProjPlantIdCli::Scraper.scrape_profile_page(plant.link)
-            plant.add_plant_attributes(attributes)
+    def self.add_attributes_to_mushrooms
+        ProjMushroomIdCli::Mushroom.all.each do |mushroom|
+            attributes = ProjMushroomIdCli::Scraper.scrape_profile_page(mushroom.link)
+            mushroom.add_mushroom_attributes(attributes)
         end
     end
 
@@ -42,10 +42,10 @@ class ProjPlantIdCli::Cli
             #     when "menu"
             #         print_main_menu
             #     when "select"
-            #         plant = select_plant
-            #         print_description(plant)
+            #         mushroom = select_mushroom
+            #         print_description(mushroom)
             #     when "link"
-            #         link_plant
+            #         link_mushroom
             #     else
             #         puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
             # end
@@ -57,10 +57,10 @@ class ProjPlantIdCli::Cli
             elsif input == "menu"
                 print_main_menu
             elsif input == "select"
-                plant = select_plant
-                print_description(plant)
+                mushroom = select_mushroom
+                print_description(mushroom)
             elsif input == "link"
-                link_plant
+                link_mushroom
             else
                 puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
             end
@@ -84,84 +84,88 @@ class ProjPlantIdCli::Cli
     #------------------------------
     
     def self.print_intro      
-        puts " \n --- #{ProjPlantIdCli::Scraper.introtext}"
-        list_all_plant_names
+        puts " \n --- #{ProjMushroomIdCli::Scraper.introtext}"
+        list_all_mushroom_names
     end
 
     def self.list_all
-        ProjPlantIdCli::Plant.all.each{ |plant|
+        ProjMushroomIdCli::Mushroom.all.each{ |mushroom|
             puts "------------------------------------\n------------------------------------\n\n"
-            print_description(plant)
+            print_description(mushroom)
             puts "------------------------------------\n------------------------------------\n\n"
         }   
     end
 
-    def self.list_all_plant_names
+    def self.list_all_mushroom_names
         puts "\n"
-        ProjPlantIdCli::Plant.all.each.with_index{ |plant, i|
-            puts "#{i+1}. #{plant.common_name}"
+        ProjMushroomIdCli::Mushroom.all.each.with_index{ |mushroom, i|
+            puts "#{i+1}. #{mushroom.common_name}"
         }
     end
 
     
-    def self.select_plant
-        list_all_plant_names
-        num = nil
-        found = false
+    def self.select_mushroom
+        list_all_mushroom_names
         firstTime = true
-        plant = nil
+        mushroom = nil
+        found = false
         
         while !found  
-            puts "\n I'm sorry! Please enter one of the numbers of an available plant.\n" if !firstTime
-            puts "\nPlease type the number of the plant you'd like to select: \n"
+            found = false
+            num = nil
+            puts "\n I'm sorry! Please enter one of the numbers of an available mushroom.\n" if !firstTime
+            puts "\nPlease type the number of the mushroom you'd like to select: \n"
             num = gets.chomp.to_i
-            plant = ProjPlantIdCli::Plant.all[num-1]
-            found = true if plant.class == ProjPlantIdCli::Plant
+            if num > 0 && num < 11
+                # binding.pry
+                mushroom = ProjMushroomIdCli::Mushroom.all[num-1]
+                found = true if mushroom.class == ProjMushroomIdCli::Mushroom
+            end
             firstTime = false
         end
-        plant
+        mushroom
     end
     
-    # def self.select_plant
+    # def self.select_mushroom
     #     input = nil
     #     found = false
-    #     plant = nil
+    #     mushroom = nil
         
     #     while !found  
-    #         list_all_plant_names
-    #         puts "\nPlease type the number of the plant you'd like to select: \n"
+    #         list_all_mushroom_names
+    #         puts "\nPlease type the number of the mushroom you'd like to select: \n"
     #         input = gets.chomp
     #         if input == exit 
     #             return
-    #         elsif input.to_i > 0 && input.to_i <= Plant.all.count
+    #         elsif input.to_i > 0 && input.to_i <= mushroom.all.count
     #             input = (input.to_i - 1)
-    #             plant = ProjPlantIdCli::Plant.all[input]
-    #             found = true if plant.class == ProjPlantIdCli::Plant
+    #             mushroom = ProjmushroomIdCli::mushroom.all[input]
+    #             found = true if mushroom.class == ProjmushroomIdCli::mushroom
     #         else
     #             puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
     #         end
     #     end
-    #     plant
+    #     mushroom
     # end
 
-    def self.print_description(plant)
-        plant.class.expectedInfoTypes.each {|infoType|
-            if plant.send("#{infoType}")         
+    def self.print_description(mushroom)
+        mushroom.class.expectedInfoTypes.each {|infoType|
+            if mushroom.send("#{infoType}")         
                 puts " -- #{infoType.upcase.to_s.split("_").join(" ")}"
-                puts " ---- #{plant.send("#{infoType}")}\n\n"
+                puts " ---- #{mushroom.send("#{infoType}")}\n\n"
             end
         }
 
     end
 
-    def self.link_plant
-        plant = select_plant
-        puts plant.link
+    def self.link_mushroom
+        mushroom = select_mushroom
+        puts mushroom.link
     end
 
-    # def self.search_plant
-    #     list_all_plant_names
-    #     puts "\nPlease type the name of the plant you'd like to search: \n"
+    # def self.search_mushroom
+    #     list_all_mushroom_names
+    #     puts "\nPlease type the name of the mushroom you'd like to search: \n"
     #     name = gets.chomp
     #     nameA = name.split(" ")
     #     print "https://www.google.com/search?q="
