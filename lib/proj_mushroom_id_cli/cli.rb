@@ -34,37 +34,22 @@ class ProjMushroomIdCli::Cli
         while input != "exit" 
             
             input = gets.chomp.downcase
-            # case input
-            #     when "read intro"
-            #         print_intro
-            #     when "all"
-            #         list_all 
-            #     when "menu"
-            #         print_main_menu
-            #     when "select"
-            #         mushroom = select_mushroom
-            #         print_description(mushroom)
-            #     when "link"
-            #         link_mushroom
-            #     else
-            #         puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
-            # end
-            # print_main_menu
-            if input == "read intro"
-                print_intro
-            elsif input == "all"
-                list_all 
-            elsif input == "menu"
-                print_main_menu
-            elsif input == "select"
-                mushroom = select_mushroom
-                print_description(mushroom) if mushroom.class == ProjMushroomIdCli::Mushroom
-            elsif input == "link"
-                link_mushroom
-            else
-                puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
+            case input
+                when "read intro"
+                    print_intro
+                when "all"
+                    list_all 
+                when "menu"
+                    print_main_menu
+                when "select"
+                    mushroom = select_mushroom
+                    print_description(mushroom) if mushroom.class == ProjMushroomIdCli::Mushroom
+                when "link"
+                    link_mushroom
+                else
+                    puts "\n\n\nI'm sorry! You entered an invalid input. Please be mindful of the menu selection options.\n\n"
             end
-            print_main_menu
+            print_main_menu            
         end
     end
 
