@@ -31,7 +31,8 @@ class ProjMushroomIdCli::Cli
     def self.main_menu
         input = ""
         while input != "exit" 
-            print_main_menu                  
+            print_main_menu
+            print "-> ".colorize(:blue)               
             input = gets.chomp.downcase
             case input
                 when "read intro"
@@ -84,11 +85,34 @@ class ProjMushroomIdCli::Cli
         }   
     end
 
+
     def self.list_all_mushroom_names
-        puts "\n"
-        ProjMushroomIdCli::Mushroom.all.each.with_index{ |mushroom, i|
-            puts "#{i+1}. #{mushroom.common_name}".colorize(:blue)
-        }
+        found = false 
+
+        while !found  
+            found = false
+            input, start, fin = nil
+            puts "\n Please enter the range of mushrooms you would like to display. Total range is 1-#{ProjMushroomIdCli::Mushroom.all.count}. ex: '1-10'\n".colorize(:blue)
+            puts "\n Or you can type 'menu' to return to the main menu.\n".colorize(:blue)
+            print "-> ".colorize(:blue)
+            input = gets.chomp
+            return 'exiting' if input == 'menu'
+            input = input.split("-")
+            start = input[0].to_i
+            fin = input[1].to_i
+            if start > 0 && start <= ProjMushroomIdCli::Mushroom.all.count && fin >= start && fin <= ProjMushroomIdCli::Mushroom.all.count
+                for i in start..fin do
+                    puts "#{i}. #{ProjMushroomIdCli::Mushroom.all[i-1].common_name}".colorize(:blue)
+                    found = true
+                end
+            else 
+                puts "\n\n\n\n\n ---I'm sorry! I didn't get that. Please enter a valid range. \n".colorize(:red)
+            end
+            # ProjMushroomIdCli::Mushroom.all.each.with_index{ |mushroom, i|
+            #     puts "#{i+1}. #{mushroom.common_name}".colorize(:blue)
+            # }
+        end
+        return 'all clear'
     end
 
     
@@ -96,13 +120,16 @@ class ProjMushroomIdCli::Cli
         firstTime = true
         mushroom = nil
         found = false
+
         
         while !found  
             found = false
             num = nil
-            puts "\n\n\n\n\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n".colorize(:red) if !firstTime
-            list_all_mushroom_names
+            puts "\n\n\n\n\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n".colorize(:red) if !firstTime && exiting != 'exiting'
+            exiting = list_all_mushroom_names
+            return if exiting == 'exiting'
             puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n".colorize(:blue)
+            print "-> ".colorize(:gem)
             num = gets.chomp
             return if num == 'menu'
             num = num.to_i
