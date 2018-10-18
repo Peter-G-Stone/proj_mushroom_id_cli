@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+TODO: The CLI allows you to retrieve information from foragingguide.com's 'in season mushrooms' page. Once the page has been scraped, there are ~60 instances of a Mushroom class containing a good deal of information about indentification. The CLI allows you to print descriptions of individual mushrooms, print all the mushrooms' descriptions, or get a link to an individual mushroom's foragingguide.com profile page.  
 
 ## Development
 
