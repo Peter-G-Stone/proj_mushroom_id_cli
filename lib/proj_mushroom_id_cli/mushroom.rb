@@ -2,9 +2,9 @@ class ProjMushroomIdCli::Mushroom
     
     @@all = []
     
-    attr_accessor :link, :common_name, :latin_name, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spores, :flesh, :habitat, :frequency
+    attr_accessor :link, :common_name, :latin_name, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spore_surface, :spores, :flesh, :habitat, :frequency
 
-    @@expectedInfoTypes = [:common_name, :latin_name, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spores, :flesh, :habitat, :frequency, :link]
+    @@expectedInfoTypes = [:common_name, :latin_name, :edibility, :eating_notes, :preserving, :cap, :fruit_body, :gills, :stem, :tubes, :pores, :spore_surface, :spores, :flesh, :habitat, :frequency, :link]
 
     def initialize(mushroom_hash)
         mushroom_hash.each{|k,v| self.send(("#{k}="), v)}
@@ -18,7 +18,13 @@ class ProjMushroomIdCli::Mushroom
     end 
 
     def add_mushroom_attributes(attributes_hash)
-        attributes_hash.each{|k,v| self.send(("#{k}="), v)}
+        # binding.pry
+        
+        attributes_hash.each{|k,v| 
+            
+            self.send(("#{k}="), v)
+        }
+        
     end
 
     def self.find_by_common_name(common_name)

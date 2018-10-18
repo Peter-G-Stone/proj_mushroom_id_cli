@@ -23,7 +23,7 @@ require 'pry'
 
 class ProjMushroomIdCli::Scraper
 
-    @@introtext
+    @@introtext = "Please exercise extreme caution when foraging mushrooms. \nAlways forage with an experienced guide. \nDo not consume anything unless you are 1000% sure what you are eating."
     
     def self.introtext
         @@introtext
@@ -42,14 +42,24 @@ class ProjMushroomIdCli::Scraper
         # @@introtext = (doc.css(".article p").text.split("»")[1].split(".").join(". ") + ".")
         # originally introtext read from the '10 most common' webpage. 
         #Now that we're scraping the 'in season' page, introtext will be set to a custom intro.
-        @@introtext = "Please excercise extreme caution when foraging mushrooms. \nAlways forage with an experienced guide. \nDo not consume anything unless you are 1000% sure what you are eating."
+        # see this above: @@introtext = "Please exercise extreme caution when foraging mushrooms. \nAlways forage with an experienced guide. \nDo not consume anything unless you are 1000% sure what you are eating."
 
         mushrooms_array = []
         
-        doc.css("li").each.with_index do |mushroom, i|
-            mushrooms_array << {common_name: doc.css("li")[i].text, link: "http://www.foragingguide.com" + "#{doc.css("li a")[i].attr("href")}"}
-        end
+        # this was how we scraped the first 10 wild mushrooms page:
+        #
+        # doc.css("li").each.with_index do |mushroom, i|
+        #     mushrooms_array << {common_name: doc.css("li")[i].text, link: "http://www.foragingguide.com" + "#{doc.css("li a")[i].attr("href")}"}
+        # end
         
+        #now we scrape the 'in season' page:
+
+        mushroomNokoEl_arr = doc.css(".info")
+        
+        mushroomNokoEl_arr.each.with_index do |mushroom, i|
+            mushrooms_array << {common_name: mushroom.css(".name")[0].text, link: "http://www.foragingguide.com" + "#{mushroom.css("a").attr("href").value}"}
+        end
+
         mushrooms_array
     end
 
@@ -62,15 +72,14 @@ class ProjMushroomIdCli::Scraper
         profile_hash = {
             latin_name: doc.css("title").text.split(" - ")[1]
         }
-        
-        doc.css(".sp_items p").drop(2).each do |nokoEl|
-            profile_hash[parse_key(nokoEl)] = nokoEl.children[1].text.gsub(":", "").strip
+        doc.css(".sp_items p").drop(2).each do |nokoEl|            
+            profile_hash[parse_key(nokoEl).to_sym] = nokoEl.css(".info").text.gsub(":", "").strip
         end
         profile_hash
         
     end
 
     def self.parse_key(nokoEl)
-        nokoEl.children[0].text.gsub(":", "").strip.downcase.split(" ").join("_")
+        nokoEl.css(".label").text.gsub(":", "").strip.downcase.split(" ").join("_")
     end
 end

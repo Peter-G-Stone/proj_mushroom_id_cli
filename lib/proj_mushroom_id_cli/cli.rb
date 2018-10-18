@@ -1,20 +1,19 @@
 class ProjMushroomIdCli::Cli 
 
     def self.run  ### HERE YOU FIND OUR MAIN PROCESS - FIRST WE GET THE INFO, THEN WE CYCLE THE MAIN MENU
+        puts "Retrieving your mushroom info, one moment please...".colorize(:magenta)
         get_info
         main_menu
     end
 
-    BASE_URL = "http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms"
+    #BASE_URL = "http://www.foragingguide.com/mushrooms/articles/general/your_first_10_wild_mushrooms"
+    BASE_URL = "http://www.foragingguide.com/mushrooms/in_season"
     
 
-    # def run < DONE
-    # make mushrooms < DONE 
-    # add_attributes_to_mushrooms < DONE
-    # display_mushrooms << NEED TO IMPROVE THIS, USE COLORIZE TO MAKE IT PRETTY
-        # possible colors: black, red, green, yellow, blue, magenta, cyan, white, plus all those things with light_
-    # sort methods << MAY WANT TO ADD THIS
-    # end
+    #This Mushroom Foraging CLI can:
+    # use the Scraper class to scrape our Base URL and make instances of the Mushroom class with names and profile page URLs
+    # retrieve attributes of these mushrooms through the mushroom profile pages
+    # display mushroom info << note on colorize gem:(possible colors: black, red, green, yellow, blue, magenta, cyan, white, plus all those things with 'light_')
 
     def self.get_info
         mushrooms_array = ProjMushroomIdCli::Scraper.scrape_index_page(BASE_URL)
@@ -45,7 +44,8 @@ class ProjMushroomIdCli::Cli
                     mushroom = select_mushroom
                     if mushroom.class == ProjMushroomIdCli::Mushroom
                         puts "\n\n Here is your selection: \n -------------".colorize(:magenta)
-                        print_description(mushroom) 
+                        print_description(mushroom)
+                        puts "See your requested info above.".colorize(:magenta)
                     end
                 when "link"
                     link_mushroom
@@ -101,13 +101,12 @@ class ProjMushroomIdCli::Cli
             found = false
             num = nil
             puts "\n\n\n\n\n ---I'm sorry! I didn't get that. Please enter one of the numbers of an available mushroom. \n".colorize(:red) if !firstTime
-            puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n".colorize(:blue)
             list_all_mushroom_names
+            puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n".colorize(:blue)
             num = gets.chomp
             return if num == 'menu'
             num = num.to_i
-            if num > 0 && num < 11
-                # binding.pry
+            if num > 0 && num <= ProjMushroomIdCli::Mushroom.all.count 
                 mushroom = ProjMushroomIdCli::Mushroom.all[num-1]
                 found = true if mushroom.class == ProjMushroomIdCli::Mushroom
             end
