@@ -129,7 +129,7 @@ class ProjMushroomIdCli::Cli
             exiting = list_all_mushroom_names
             return if exiting == 'exiting'
             puts "\nPlease type the number of the mushroom you'd like to select. \nOr you can type 'menu' to return to the main menu.\n".colorize(:blue)
-            print "-> ".colorize(:gem)
+            print "-> ".colorize(:blue)
             num = gets.chomp
             return if num == 'menu'
             num = num.to_i
