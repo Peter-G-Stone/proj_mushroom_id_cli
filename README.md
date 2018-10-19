@@ -1,8 +1,6 @@
 # ProjMushroomIdCli
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/proj_mushroom_id_cli`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The CLI allows you to retrieve information from foragingguide.com's 'in season mushrooms' page. Once the page has been scraped, there are ~60 instances of a Mushroom class containing a good deal of information about indentification. The CLI allows you to print descriptions of individual mushrooms, print all the mushrooms' descriptions, or get a link to an individual mushroom's foragingguide.com profile page. 
 
 ## Installation
 
@@ -22,7 +20,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: The CLI allows you to retrieve information from foragingguide.com's 'in season mushrooms' page. Once the page has been scraped, there are ~60 instances of a Mushroom class containing a good deal of information about indentification. The CLI allows you to print descriptions of individual mushrooms, print all the mushrooms' descriptions, or get a link to an individual mushroom's foragingguide.com profile page.  
+Major commands in the interface:
+"read intro" - prints a custom intro
+"all" - prints all mushroom info
+"select" - prints list of mushrooms, allows you to select one and displays that one's info
+"link" - prints list of mushrooms, allows you to select one and displays that one's link
+"exit" - exits program
 
 ## Development
 
