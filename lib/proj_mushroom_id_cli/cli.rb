@@ -190,6 +190,7 @@ class ProjMushroomIdCli::Cli
         firstTime = true
         mushroom = nil
         found = false
+        exiting = nil #helps handle if the user wants to exit from the "list_all_mushroom_names" method
         
         
         while !found  
@@ -205,9 +206,11 @@ class ProjMushroomIdCli::Cli
             num = num.to_i
             if num > 0 && num <= ProjMushroomIdCli::Mushroom.all.count 
                 mushroom = ProjMushroomIdCli::Mushroom.all[num-1]
+                binding.pry
                 found = true if mushroom.class == ProjMushroomIdCli::Mushroom
             end
             firstTime = false
+            
         end
         mushroom
     end

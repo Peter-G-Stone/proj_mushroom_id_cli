@@ -18,7 +18,6 @@ class ProjMushroomIdCli::Mushroom
     end 
 
     def add_mushroom_attributes(attributes_hash)
-        # binding.pry
         
         attributes_hash.each{|k,v| 
             
