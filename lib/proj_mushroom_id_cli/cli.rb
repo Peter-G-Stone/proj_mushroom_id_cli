@@ -15,6 +15,9 @@ class ProjMushroomIdCli::Cli
     # retrieve attributes of these mushrooms through the mushroom profile pages
     # display mushroom info << note on colorize gem:(possible colors: black, red, green, yellow, blue, magenta, cyan, white, plus all those things with 'light_')
 
+
+
+
     def self.get_info
         mushrooms_array = ProjMushroomIdCli::Scraper.scrape_index_page(BASE_URL) 
             #^^^gets an array of mushroom hashes which contain the common name and the link to the profile page
@@ -29,13 +32,21 @@ class ProjMushroomIdCli::Cli
     
     
     #add_attributes_to_mushrooms
-        #scrapes the mushrooms' profile pages, adding all the details into instances of Mushroom class
+        #calles Scraper's scrape_profile_page, 
+        # stores attributes from that mushroom's profile page, 
+        # adding all the details into instances of Mushroom class
     def self.add_attributes_to_mushrooms
         ProjMushroomIdCli::Mushroom.all.each do |mushroom|
-            attributes = ProjMushroomIdCli::Scraper.scrape_profile_page(mushroom.link)
-            mushroom.add_mushroom_attributes(attributes)
+            attributes_hash = ProjMushroomIdCli::Scraper.scrape_profile_page(mushroom.link)
+            mushroom.add_mushroom_attributes(attributes_hash)
         end
     end
+
+    # ------------
+    # ------------
+    # ------------ MENU METHODS
+    # ------------
+    # ------------
 
     #main_menu
         #cycles thru our main menu and gets user input, calls appropriate methods according to input
@@ -81,11 +92,16 @@ class ProjMushroomIdCli::Cli
         puts "To quit, type 'exit'.".colorize(:blue)
     end
 
-    #------------------------------
-    #------------------------------
-    #------------------------------
-    #------------------------------
+
+    # ------------
+    # ------------ 
+    # ------------ PRINTING INFO METHODS
+    # ------------
+    # ------------
+
+
     
+
     #print_intro
         #prints out the custom intro message that we set in our scraper
         #called by main_menu
@@ -138,14 +154,43 @@ class ProjMushroomIdCli::Cli
         return 'all clear'
     end
 
+    
+    #print_description(mushroom)
+    #takes in instance of mushroom class, prints all available description info
+    #called by main_menu and list_all
+    def self.print_description(mushroom)
+        mushroom.class.expectedInfoTypes.each {|infoType|
+            if mushroom.send("#{infoType}")         
+                puts " -- #{infoType.upcase.to_s.split("_").join(" ")}".colorize(:blue)
+                puts " ---- #{mushroom.send("#{infoType}")}\n\n"
+            end
+        }
+        
+    end
+
+    #link_mushroom
+    #prints the link to the mushroom's profile page, so user can see pictures
+    #called by main_menu
+    def self.link_mushroom
+        mushroom = select_mushroom
+        puts mushroom.link if mushroom.class == ProjMushroomIdCli::Mushroom
+    end
+    
+    # ------------
+    # ------------
+    # ------------ SELECT MUSHROOM METHOD
+    # ------------
+    # ------------
+    
+    
     #select_mushroom
-        #allows user to select a mushroom after a numbered list has been printed
-        #called by main_menu, link_mushroom
+    #allows user to select a mushroom after a numbered list has been printed
+    #called by main_menu, link_mushroom
     def self.select_mushroom
         firstTime = true
         mushroom = nil
         found = false
-
+        
         
         while !found  
             found = false
@@ -165,26 +210,5 @@ class ProjMushroomIdCli::Cli
             firstTime = false
         end
         mushroom
-    end
-
-    #print_description(mushroom)
-        #takes in instance of mushroom class, prints all available description info
-        #called by main_menu and list_all
-    def self.print_description(mushroom)
-        mushroom.class.expectedInfoTypes.each {|infoType|
-            if mushroom.send("#{infoType}")         
-                puts " -- #{infoType.upcase.to_s.split("_").join(" ")}".colorize(:blue)
-                puts " ---- #{mushroom.send("#{infoType}")}\n\n"
-            end
-        }
-
-    end
-
-    #link_mushroom
-        #prints the link to the mushroom's profile page, so user can see pictures
-        #called by main_menu
-    def self.link_mushroom
-        mushroom = select_mushroom
-        puts mushroom.link if mushroom.class == ProjMushroomIdCli::Mushroom
     end
 end
